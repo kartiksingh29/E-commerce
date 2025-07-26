@@ -40,9 +40,7 @@ public class FakeStoreProductService implements IProductService {
 
     @Override
     public Product getProductById(Long id) {
-        //int a = 1/0;
-        String s = null;
-        s.length();
+
         ResponseDTO responseDTO = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/"+id,
                                    ResponseDTO.class);
