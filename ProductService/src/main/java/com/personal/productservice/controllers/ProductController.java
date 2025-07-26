@@ -1,10 +1,13 @@
 package com.personal.productservice.controllers;
 
+import com.personal.productservice.dto.ErrorResponseDTO;
 import com.personal.productservice.dto.RequestDTO;
 import com.personal.productservice.models.Category;
 import com.personal.productservice.models.Product;
 import com.personal.productservice.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,14 +25,15 @@ public class ProductController {
     }
 
     @GetMapping("/")
-    public List<Product> getAllProducts() {
-        return new ArrayList<>();
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        return ResponseEntity.status(HttpStatus.OK).body(products) ;
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long id){
-        Product product = productService.getProductById(id);
-        return product;
+    public ResponseEntity getProductById(@PathVariable("id") Long id) {
+            Product product = productService.getProductById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @GetMapping("/categories")
@@ -38,13 +42,13 @@ public class ProductController {
     }
 
     @GetMapping("/categories/{id}")
-    public List<Product> getAllProductsByCategory(@PathVariable("id") String categoryName) {
+    public List<Product> getAllProductsByCategory(@PathVariable("id") String categoryName){
         return new ArrayList<>();
     }
 
     @PostMapping("/")
-    public Product addProduct(@RequestBody RequestDTO addProductDTO) {
-        return new Product() ;
+    public ResponseEntity<Product> addProduct(@RequestBody RequestDTO addProductDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Product());
     }
 
     @PatchMapping("/{id}")
@@ -53,17 +57,12 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Product replaceProduct(@PathVariable("id") Long productId, @RequestBody RequestDTO requestDTO) {
-        return new Product();
+    public Product replaceProduct(@PathVariable("id") Long id, @RequestBody RequestDTO requestDTO){
+        return productService.replaceProduct(id,requestDTO);
     }
 
     @DeleteMapping("/{id}")
     public boolean deleteProduct(@PathVariable("id") Long id) {
         return true ;
     }
-
-
-
-
-
 }
