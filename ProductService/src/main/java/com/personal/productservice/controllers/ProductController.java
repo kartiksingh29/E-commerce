@@ -2,6 +2,7 @@ package com.personal.productservice.controllers;
 
 import com.personal.productservice.dto.ErrorResponseDTO;
 import com.personal.productservice.dto.RequestDTO;
+import com.personal.productservice.exceptions.ProductNotFoundException;
 import com.personal.productservice.models.Category;
 import com.personal.productservice.models.Product;
 import com.personal.productservice.services.IProductService;
@@ -31,7 +32,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getProductById(@PathVariable("id") Long id) {
+    public ResponseEntity getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
             Product product = productService.getProductById(id);
             return ResponseEntity.status(HttpStatus.OK).body(product);
     }

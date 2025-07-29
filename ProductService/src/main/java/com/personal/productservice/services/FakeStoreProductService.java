@@ -2,6 +2,7 @@ package com.personal.productservice.services;
 
 import com.personal.productservice.dto.RequestDTO;
 import com.personal.productservice.dto.ResponseDTO;
+import com.personal.productservice.exceptions.ProductNotFoundException;
 import com.personal.productservice.models.Category;
 import com.personal.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class FakeStoreProductService implements IProductService {
     RestTemplate restTemplate ;
 
     @Autowired
-    public FakeStoreProductService(RestTemplate restTemplate){
+    public FakeStoreProductService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate ;
     }
 
@@ -39,13 +40,18 @@ public class FakeStoreProductService implements IProductService {
     }
 
     @Override
-    public Product getProductById(Long id) {
+    public Product getProductById(Long id) throws ProductNotFoundException {
 
         ResponseDTO responseDTO = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/"+id,
                                    ResponseDTO.class);
 
+        if(responseDTO == null) {
+            throw new ProductNotFoundException("Product with id = "+ id + " does not exist!");
+        }
+
         Product product = getProductFromResponseDTO(responseDTO);
+
         return product ;
     }
 
