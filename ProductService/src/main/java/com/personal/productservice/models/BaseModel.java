@@ -13,6 +13,7 @@ import java.util.Date;
 public class BaseModel {
     @Id
     private Long id;
+    // Auditing attributes common to all other models
     private Date createdAt;
     private Date updatedAt;
     private boolean isDeleted;
