@@ -7,6 +7,7 @@ import com.personal.productservice.models.Category;
 import com.personal.productservice.models.Product;
 import com.personal.productservice.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ProductController {
     IProductService productService ;
 
     @Autowired
-    public ProductController(IProductService productService){
+    public ProductController(@Qualifier("realProductService") IProductService productService){
         this.productService = productService;
     }
 
@@ -32,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
             Product product = productService.getProductById(id);
             return ResponseEntity.status(HttpStatus.OK).body(product);
     }
@@ -63,7 +64,14 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteProduct(@PathVariable("id") Long id) {
-        return true ;
+    public ResponseEntity<Boolean> deleteProduct(@PathVariable("id") Long id) throws ProductNotFoundException {
+        Boolean deleted = productService.deleteProductById(id);
+        return ResponseEntity.ok().body(deleted);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleProductNotFoundException(ProductNotFoundException exception) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(exception.getMessage()+ " at the controller") ;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDTO) ;
     }
 }

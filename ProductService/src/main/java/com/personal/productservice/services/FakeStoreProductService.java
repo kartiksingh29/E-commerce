@@ -6,6 +6,7 @@ import com.personal.productservice.exceptions.ProductNotFoundException;
 import com.personal.productservice.models.Category;
 import com.personal.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Qualifier("fakeProductService")
 public class FakeStoreProductService implements IProductService {
 
     RestTemplate restTemplate ;
@@ -71,7 +73,7 @@ public class FakeStoreProductService implements IProductService {
 
     @Override
     public Product replaceProduct(Long id, RequestDTO requestDTO){
-
+        // the below method is void, but we need a Product Response
         //restTemplate.put("https://fakestoreapi.com/products/"+id,requestDTO);
 
         //In one API we will PUT and also get back the response
@@ -87,4 +89,8 @@ public class FakeStoreProductService implements IProductService {
         return getProductFromResponseDTO(responseDTO);
     }
 
+    @Override
+    public Boolean deleteProductById(Long id) throws ProductNotFoundException {
+        return Boolean.FALSE;
+    }
 }
