@@ -22,7 +22,7 @@ public class ProductController {
     IProductService productService ;
 
     @Autowired
-    public ProductController(@Qualifier("realProductService") IProductService productService){
+    public ProductController(@Qualifier("realProductService") IProductService productService) {
         this.productService = productService;
     }
 
@@ -38,29 +38,25 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
-    @GetMapping("/categories")
-    public List<Category> getAllCategories(){
-        return new ArrayList<>() ;
-    }
-
-    @GetMapping("/categories/{id}")
-    public List<Product> getAllProductsByCategory(@PathVariable("id") String categoryName){
-        return new ArrayList<>();
-    }
-
     @PostMapping("/")
     public ResponseEntity<Product> addProduct(@RequestBody RequestDTO addProductDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Product());
+        Product product = getProductFromRequestDTO(addProductDTO);
+        Product addedProduct =productService.addProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedProduct);
     }
 
     @PatchMapping("/{id}")
-    public Product updateProduct(@PathVariable("id") Long productId, @RequestBody RequestDTO requestDTO){
-        return new Product();
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody RequestDTO requestDTO) throws ProductNotFoundException {
+        Product product = getProductFromRequestDTO(requestDTO);
+        Product updatedProduct = productService.updateProduct(id,product);
+
+        return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
     }
 
     @PutMapping("/{id}")
-    public Product replaceProduct(@PathVariable("id") Long id, @RequestBody RequestDTO requestDTO){
-        return productService.replaceProduct(id,requestDTO);
+    public ResponseEntity<Product> replaceProduct(@PathVariable("id") Long id, @RequestBody RequestDTO requestDTO){
+        Product product = productService.replaceProduct(id,requestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @DeleteMapping("/{id}")
@@ -69,9 +65,26 @@ public class ProductController {
         return ResponseEntity.ok().body(deleted);
     }
 
+    @GetMapping("/categories/{id}")
+    public List<Product> getAllProductsByCategory(@PathVariable("id") String categoryName){
+        return new ArrayList<>();
+    }
+
+    //controller level Exception Handler
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleProductNotFoundException(ProductNotFoundException exception) {
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(exception.getMessage()+ " at the controller") ;
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDTO) ;
+    }
+
+    Product getProductFromRequestDTO(RequestDTO requestDTO){
+        Product product = new Product();
+        product.setName(requestDTO.getTitle());
+        product.setPrice(requestDTO.getPrice());
+        product.setImageURL(requestDTO.getImage());
+        product.setDescription(requestDTO.getDescription());
+        product.setCategory(new Category());
+        product.getCategory().setName(requestDTO.getCategory());
+        return product;
     }
 }

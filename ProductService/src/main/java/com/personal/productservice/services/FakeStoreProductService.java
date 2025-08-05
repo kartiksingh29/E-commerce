@@ -11,7 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -72,6 +71,11 @@ public class FakeStoreProductService implements IProductService {
     }
 
     @Override
+    public Product addProduct(Product product) {
+        return null;
+    }
+
+    @Override
     public Product replaceProduct(Long id, RequestDTO requestDTO){
         // the below method is void, but we need a Product Response
         //restTemplate.put("https://fakestoreapi.com/products/"+id,requestDTO);
@@ -87,6 +91,11 @@ public class FakeStoreProductService implements IProductService {
                 HttpMethod.PUT, requestCallback, responseExtractor);
 
         return getProductFromResponseDTO(responseDTO);
+    }
+
+    @Override
+    public Product updateProduct(Long id, Product product) throws ProductNotFoundException {
+        return null;
     }
 
     @Override
