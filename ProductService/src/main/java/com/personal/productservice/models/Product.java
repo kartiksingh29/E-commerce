@@ -19,5 +19,5 @@ public class Product extends BaseModel {
     // cascade persist means if product is added, check for category as well
     // cascade merge means if product is updated, check for category as well
     // cascade remove means if product is removed, check for category as well
-    // check for category means if category doesn't already exist then add it
+    // check for category as well means if category doesn't already exist then add it automatically
 }
