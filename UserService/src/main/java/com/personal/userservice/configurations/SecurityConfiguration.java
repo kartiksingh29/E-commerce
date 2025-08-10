@@ -24,3 +24,7 @@ public class SecurityConfiguration {
         return http.build();
     }
 }
+
+// this class is to disable the security for API testing via postman
+//after adding spring-boot-starter-security in pom.xml all API's become secure.
+// you need a user and password( printed on console ) to hit an endpoint

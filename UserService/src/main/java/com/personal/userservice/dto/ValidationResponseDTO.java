@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ValidationResponseDTO{
+public class ValidationResponseDTO {
 
     private Long userId;
     private String name;
