@@ -102,15 +102,17 @@ public class SecurityConfig {
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("oidc-client")
-                .clientSecret("{noop}secret")
+                .clientSecret("$2a$12$LG0nUQjLUqzzsRRkGQ08mOhVrvKgEXNQp58fPh3PHD6xHZ.aMAKvS")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 //the below line means that after login, redirect to this page
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
-                .postLogoutRedirectUri("http://127.0.0.1:8080/")
+                .redirectUri("https://oauth.pstmn.io/v1/callback")
+                .postLogoutRedirectUri("https://oauth.pstmn.io/v1/callback")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
+                .scope("ADMIN")//added by me
+                .scope("USER") //added by me
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
 
