@@ -8,7 +8,6 @@ import com.personal.userservice.exceptions.UserDoesNotExistException;
 import com.personal.userservice.models.Token;
 import com.personal.userservice.models.User;
 import com.personal.userservice.services.IUserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logOut(@RequestBody LogoutRequestDTO logoutRequestDTO) throws InvalidOrExpiredTokenException {
+    public ResponseEntity<Void> logout(@RequestBody LogoutRequestDTO logoutRequestDTO) throws InvalidOrExpiredTokenException {
         Token token = userService.logout(logoutRequestDTO.getToken());
         ResponseEntity<Void> responseEntity = new ResponseEntity<>(
                 token.isDeleted()?HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR);
