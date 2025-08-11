@@ -1,7 +1,9 @@
 package com.personal.productservice.controllers;
 
+import com.personal.productservice.commons.AuthenticationCommons;
 import com.personal.productservice.dto.ErrorResponseDTO;
 import com.personal.productservice.dto.RequestDTO;
+import com.personal.productservice.dto.ValidationResponseDTO;
 import com.personal.productservice.exceptions.ProductNotFoundException;
 import com.personal.productservice.models.Category;
 import com.personal.productservice.models.Product;
@@ -19,15 +21,28 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    IProductService productService ;
+    private IProductService productService ;
+
+    private AuthenticationCommons authenticationCommons;
 
     @Autowired
-    public ProductController(@Qualifier("realProductService") IProductService productService) {
+    public ProductController(@Qualifier("realProductService") IProductService productService, AuthenticationCommons authenticationCommons) {
         this.productService = productService;
+        this.authenticationCommons = authenticationCommons;
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<Product>> getAllProducts(@RequestHeader("AuthenticationToken") String tokenValue) {
+
+        ValidationResponseDTO validationResponseDTO =
+                 authenticationCommons.validateToken(tokenValue);
+
+        if(validationResponseDTO == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        // also if role from response does not match, then also unauthorized
+
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.status(HttpStatus.OK).body(products) ;
     }
