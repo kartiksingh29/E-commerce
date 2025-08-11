@@ -1,1 +1,0 @@
-ALTER TABLE token RENAME COLUMN token to value ;

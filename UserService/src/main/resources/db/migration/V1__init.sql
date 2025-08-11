@@ -10,7 +10,7 @@ CREATE TABLE token
 (
     id          BIGINT AUTO_INCREMENT NOT NULL,
     deleted     BIT(1) NOT NULL,
-    token       VARCHAR(255) NULL,
+    value       VARCHAR(255) NULL,
     user_id     BIGINT NULL,
     expiry_date datetime NULL,
     CONSTRAINT pk_token PRIMARY KEY (id)
