@@ -26,8 +26,8 @@ class UserServiceApplicationTests {
     // on executing this test, we can see entry in the client table
     void registerPostmanAsClientInMyDatabase() {
         RegisteredClient postmanClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("oidc-client")
-                .clientSecret("$2a$12$LG0nUQjLUqzzsRRkGQ08mOhVrvKgEXNQp58fPh3PHD6xHZ.aMAKvS")
+                .clientId("postman-client")
+                .clientSecret("$2a$10$T/Qlujt57PJL1yeR6dGTGu9cqMna73abRPyxYuSnctRAW5.AJxX2a")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)

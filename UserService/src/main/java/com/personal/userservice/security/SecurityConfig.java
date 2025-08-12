@@ -77,8 +77,10 @@ public class SecurityConfig {
             throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll() //added myself to disable authentication for incoming register user request
                 )
+                .cors().disable()
+                .csrf().disable()
                 // Form login handles the redirect to the login page from the
                 // authorization server filter chain
                 .formLogin(Customizer.withDefaults());
@@ -86,7 +88,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
+//    @Bean
     public UserDetailsService userDetailsService() {
         UserDetails userDetails = User.builder()
                 .username("user")
@@ -98,11 +100,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    // this is the client (someone who wants to use this auth service) registration method
+    // this is the client (someone who wants to use this auth service) registration bean
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("oidc-client")
-                .clientSecret("$2a$12$LG0nUQjLUqzzsRRkGQ08mOhVrvKgEXNQp58fPh3PHD6xHZ.aMAKvS")
+                .clientId("postman-client")
+                .clientSecret("$2a$10$ev4Wj960eO43Rgit3bkVYONDeNT1wClT20e5HPD0ZqJD8JhcZzGYG")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)

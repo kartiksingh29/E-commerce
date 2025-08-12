@@ -11,3 +11,11 @@ public class UserServiceApplication {
     }
 
 }
+
+// FINAL POINTS TO IMPLEMENT IN OAuth SERVER
+
+// 1) I want to use my own database to maintain users
+
+// 2) Add custom data to the JWT tokens.
+
+// 3) I want product-service to use this OAuth Server of mine for authentication.
