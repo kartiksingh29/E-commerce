@@ -32,14 +32,14 @@ public class ProductController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Product>> getAllProducts(@RequestHeader("AuthenticationToken") String tokenValue) {
+    public ResponseEntity<List<Product>> getAllProducts() {
 
-        ValidationResponseDTO validationResponseDTO =
-                 authenticationCommons.validateToken(tokenValue);
-
-        if(validationResponseDTO == null){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+//        ValidationResponseDTO validationResponseDTO =
+//                 authenticationCommons.validateToken(tokenValue);
+//
+//        if(validationResponseDTO == null){
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
 
         // also if role from response does not match, then also unauthorized
 

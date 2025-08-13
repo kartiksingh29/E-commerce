@@ -11,3 +11,6 @@ public class ProductServiceApplication {
 	}
 
 }
+
+// This is my Resource Server
+// Hence it will receive a token with every request, which should be validated

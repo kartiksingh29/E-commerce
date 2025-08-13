@@ -65,6 +65,11 @@
 			<artifactId>flyway-mysql</artifactId>
 			<version>11.8.0</version>
 		</dependency>
+<!--		This below dependency is for making this an OAuth standard resource server-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
