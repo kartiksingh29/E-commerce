@@ -85,7 +85,8 @@ public class SecurityConfig {
             throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().permitAll() //added myself to disable authentication for incoming register user request
+                        .requestMatchers("/users/register").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .cors().disable()
                 .csrf().disable()
