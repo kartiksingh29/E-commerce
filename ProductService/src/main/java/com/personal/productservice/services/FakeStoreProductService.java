@@ -7,6 +7,7 @@ import com.personal.productservice.models.Category;
 import com.personal.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -22,9 +23,12 @@ public class FakeStoreProductService implements IProductService {
 
     RestTemplate restTemplate ;
 
+    RedisTemplate<String, Object> redisTemplate ;
+
     @Autowired
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate, RedisTemplate<String, Object> redisTemplate) {
         this.restTemplate = restTemplate ;
+        this.redisTemplate = redisTemplate ;
     }
 
     public Product getProductFromResponseDTO(ResponseDTO responseDTO) {
@@ -43,6 +47,13 @@ public class FakeStoreProductService implements IProductService {
     @Override
     public Product getProductById(Long id) throws ProductNotFoundException {
 
+        // try getting from Redis cache first
+        Product p = (Product) redisTemplate.opsForHash().get("products","product_"+id);
+        if ( p != null ) {
+            return p;
+        }
+
+        // if not found in cache, then make the actual API call
         ResponseDTO responseDTO = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/"+id,
                                    ResponseDTO.class);
@@ -52,6 +63,9 @@ public class FakeStoreProductService implements IProductService {
         }
 
         Product product = getProductFromResponseDTO(responseDTO);
+
+        // insert in Redis cache
+        redisTemplate.opsForHash().put("products","product_"+id, product);
 
         return product ;
     }
