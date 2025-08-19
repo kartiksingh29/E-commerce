@@ -1,5 +1,6 @@
 package com.personal.userservice.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.personal.userservice.dto.*;
 import com.personal.userservice.exceptions.InvalidOrExpiredTokenException;
 import com.personal.userservice.exceptions.InvalidPasswordException;
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> signup(@RequestBody SignupRequestDTO signupRequestDTO) throws UserAlreadyExistException {
+    public ResponseEntity<User> signup(@RequestBody SignupRequestDTO signupRequestDTO) throws UserAlreadyExistException, JsonProcessingException {
         User user = userService.signup(signupRequestDTO.getName()
                 ,signupRequestDTO.getEmail(), signupRequestDTO.getPassword());
 
